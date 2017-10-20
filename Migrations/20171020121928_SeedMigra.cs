@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace vega.Migrations
 {
-    public partial class SeedMigrations : Migration
+    public partial class SeedMigra : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Make1')");
+migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Make1')");
             migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Make2')");
             migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Make3')");
 
