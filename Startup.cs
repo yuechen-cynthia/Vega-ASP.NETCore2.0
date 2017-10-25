@@ -31,6 +31,9 @@ namespace vega
             services.AddAutoMapper();
             services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddMvc();
+            services.AddMvc().AddJsonOptions(o => {
+                o.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

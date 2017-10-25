@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using vega.Controllers.Resources;
 using vega.Core;
 using vega.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace vega.Controllers
 {
@@ -24,6 +26,7 @@ namespace vega.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {
+            //Console.WriteLine(ModelState.IsValid);
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -73,11 +76,8 @@ namespace vega.Controllers
         }
 
         [HttpDelete("{id}")] // /api/vehicles/{id}
-        public async Task<IActionResult> DeleteVehicle(int id, [FromBody] VehicleResource vehicleResource)
+        public async Task<IActionResult> DeleteVehicle(int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var vehicle = await repository.GetVehicle(id, false);
             if (vehicle == null)
                 return NotFound();
