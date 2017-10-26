@@ -6,7 +6,7 @@ using vega.Controllers.Resources;
 using vega.Core;
 using vega.Models;
 using Microsoft.EntityFrameworkCore;
-
+using vega.Core.Models;
 
 namespace vega.Controllers
 {
@@ -101,5 +101,15 @@ namespace vega.Controllers
 
             return Ok(vehicleResource);
         }
+
+    [HttpGet]
+    public async Task<QueryResultResource<VehicleResource>> GetVehicles(VehicleQueryResource filterResource)
+    {
+      var filter = mapper.Map<VehicleQueryResource, VehicleQuery>(filterResource);
+      var queryResult = await repository.GetVehicles(filter);
+
+      return mapper.Map<QueryResult<Vehicle>, QueryResultResource<VehicleResource>>(queryResult);
+    }
+
     }
 }

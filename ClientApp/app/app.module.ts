@@ -15,6 +15,8 @@ import { CounterComponent } from './components/counter/counter.component';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 import { ToastyModule } from 'ng2-toasty';
 import * as Raven from 'raven-js';
+import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 
 //added
@@ -28,7 +30,9 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
         FetchDataComponent,
         HomeComponent,
         //added
-        VehicleFormComponent
+        VehicleFormComponent,
+        VehicleListComponent,
+        PaginationComponent
     ],
     imports: [
         CommonModule,
@@ -37,11 +41,11 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
         //added
         ToastyModule.forRoot(),
         RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
             //added
             { path: 'vehicles/new', component: VehicleFormComponent },
             { path: 'vehicles/:id', component: VehicleFormComponent },
-            
+            { path: 'vehicles', component: VehicleListComponent },
             //
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
