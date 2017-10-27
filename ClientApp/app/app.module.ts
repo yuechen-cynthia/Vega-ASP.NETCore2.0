@@ -1,9 +1,11 @@
+import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
+import { PhotoService } from './services/photo.service';
 import { AppErrorHandler } from './components/app/app.error-handler';
 import { VehicleService } from './services/vehicle.service';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, BrowserXhr } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component';
@@ -17,6 +19,7 @@ import { ToastyModule } from 'ng2-toasty';
 import * as Raven from 'raven-js';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 
 
 //added
@@ -32,7 +35,8 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
         //added
         VehicleFormComponent,
         VehicleListComponent,
-        PaginationComponent
+        PaginationComponent,
+        ViewVehicleComponent
     ],
     imports: [
         CommonModule,
@@ -44,7 +48,8 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
             { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
             //added
             { path: 'vehicles/new', component: VehicleFormComponent },
-            { path: 'vehicles/:id', component: VehicleFormComponent },
+            { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+            { path: 'vehicles/:id', component: ViewVehicleComponent },
             { path: 'vehicles', component: VehicleListComponent },
             //
             { path: 'home', component: HomeComponent },
@@ -58,7 +63,11 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
     //added
     providers: [
         { provide: ErrorHandler, useClass: AppErrorHandler},
+        { provide: BrowserXhr, useClass: BrowserXhrWithProgress},
+        
         VehicleService,
+        PhotoService,
+        ProgressService
     ]
 })
 

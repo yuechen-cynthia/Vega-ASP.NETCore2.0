@@ -11,7 +11,7 @@ using vega.Models;
 
 namespace vega.Persistence
 {
-    public class VehicleRepository: IVehicleRpository
+    public class VehicleRepository: IVehicleRepository
     {
     private readonly VegaDbContext context;
     public VehicleRepository(VegaDbContext context)

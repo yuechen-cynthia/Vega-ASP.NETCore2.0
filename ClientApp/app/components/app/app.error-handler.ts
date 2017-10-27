@@ -4,26 +4,24 @@ import { ErrorHandler, Inject, NgZone, isDevMode } from '@angular/core';
 
 export class AppErrorHandler implements ErrorHandler {
   constructor(
-    @Inject(NgZone) private ngZone: NgZone,
+    private ngZone: NgZone,
     @Inject(ToastyService) private toastyService: ToastyService) {
   }
 
   handleError(error: any): void {
-    if (!isDevMode())
-      Raven.captureException(error.originalError || error);
-    else 
-      throw error;
-
     this.ngZone.run(() => {
-        if (typeof(window) !== 'undefined') {
-        this.toastyService.error({
+      this.toastyService.error({
         title: 'Error',
         msg: 'An unexpected error happened.',
         theme: 'bootstrap',
         showClose: true,
         timeout: 5000
-        });
-      }
+      });
     });
+
+    if (!isDevMode())
+      Raven.captureException(error.originalError || error);
+    else 
+      throw error;
   }
 }

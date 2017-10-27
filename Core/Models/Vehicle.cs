@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using vega.Core.Models;
 
 namespace vega.Models
 {
@@ -27,7 +28,10 @@ namespace vega.Models
         public DateTime LastUpdate { get; set; }
 
         public ICollection<VehicleFeature> Features { get; set; }
-        
-        public Vehicle() => this.Features = new Collection<VehicleFeature>();
+        public ICollection<Photo> Photos { get; set; }
+        public Vehicle() {
+            this.Features = new Collection<VehicleFeature>();
+            this.Photos = new Collection<Photo>();
+        }
     }
 }

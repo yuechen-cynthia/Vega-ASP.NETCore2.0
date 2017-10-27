@@ -14,10 +14,10 @@ namespace vega.Controllers
     public class VehiclesController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IVehicleRpository repository;
+        private readonly IVehicleRepository repository;
         private readonly IUnitOfWork unitOfWork;
 
-        public VehiclesController(IMapper mapper, IVehicleRpository repository, IUnitOfWork unitOfWork)
+        public VehiclesController(IMapper mapper, IVehicleRepository repository, IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
             this.repository = repository;

@@ -4,7 +4,7 @@ using vega.Models;
 
 namespace vega.Core
 {
-    public interface IVehicleRpository
+    public interface IVehicleRepository
     {
         Task<Vehicle> GetVehicle(int id, bool includeRelated = true);
         void Add(Vehicle vehicle);
