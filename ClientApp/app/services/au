@@ -1,0 +1,122 @@
+
+
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import 'rxjs/add/operator/filter';
+import * as auth0 from 'auth0-js';
+//added from lock
+import { JwtHelper } from 'angular2-jwt';
+import  Auth0Lock  from 'auth0-lock';
+
+@Injectable()
+export class AuthService {
+  profile: any;
+  private roles: string[] = []; 
+  
+  //from lock
+  lock = new Auth0Lock('eGc6VY0B03Ih4QMBWXqO1NfEynubhI9Q','vega-project.au.auth0.com',{});
+
+  auth0 = new auth0.WebAuth({
+    clientID: 'eGc6VY0B03Ih4QMBWXqO1NfEynubhI9Q',
+    domain: 'vega-project.au.auth0.com',
+    responseType: 'token id_token',
+    audience: 'https://vega-project.au.auth0.com/userinfo',
+    redirectUri: 'http://localhost:5000/vehicles',      
+    scope: 'openid'
+  });
+
+  constructor(public router: Router) {
+    //from lock
+   this.readUserFromLocalStorage();
+   this.lock.on("authenticated", (authResult:any) => this.onUserAuthenticated(authResult));
+  }
+
+  public login(): void {
+    this.auth0.authorize();
+    //added from lock
+    this.lock.show();
+
+  }
+
+  //looks for the result of authentication in the URL hash. Then, 
+  //the result is processed with the parseHash method from auth0.js
+public handleAuthentication(): void {
+  this.auth0.parseHash((err, authResult) => {
+
+    if (authResult && authResult.accessToken && authResult.idToken) {
+      window.location.hash = '';
+      this.setSession(authResult);
+      this.router.navigate(['/home']);
+    } else if (err) {
+      this.router.navigate(['/home']);
+      console.log(err);
+    }
+  });
+}
+
+//stores the user's access token, ID token, and the access token's expiry time in browser storage
+private setSession(authResult:any): void {
+  // Set the time that the access token will expire at
+  console.log(localStorage.getItem('authResult'));
+  const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+  this.lock
+  localStorage.setItem('access_token', authResult.accessToken);
+  localStorage.setItem('id_token', authResult.idToken);
+  localStorage.setItem('expires_at', expiresAt);
+}
+
+//removes the user's tokens and expiry time from browser storage
+public logout(): void {
+  // Remove tokens and expiry time from localStorage
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('id_token');
+  localStorage.removeItem('expires_at');
+  // Go back to the home route
+  this.router.navigate(['/']);
+
+  //added from lock
+  localStorage.removeItem('profile');
+  this.profile = null;
+  this.roles = [];
+}
+
+
+public isAuthenticated(): boolean {
+  // Check whether the current time is past the
+  // access token's expiry time
+  const expiresAt = JSON.parse((String)(localStorage.getItem('expires_at')));
+  return new Date().getTime() < expiresAt;
+  }
+
+
+//added from lock
+private onUserAuthenticated(authResult:any) {
+  localStorage.setItem('token', authResult.accessToken);
+
+  this.lock.getUserInfo(authResult.accessToken, (error:any, profile:any) => {
+    if (error)
+      throw error;
+
+    localStorage.setItem('profile', JSON.stringify(profile));
+
+    this.readUserFromLocalStorage();
+  });
+}
+
+private readUserFromLocalStorage() {
+  this.profile = JSON.parse((String)(localStorage.getItem('profile')));
+
+  var token = localStorage.getItem('token');
+  if (token) {
+    var jwtHelper = new JwtHelper();
+    var decodedToken = jwtHelper.decodeToken(token);
+    this.roles = decodedToken['https://vega.com/roles'] || [];
+  }
+}
+
+public isInRole(roleName:any) {
+  return this.roles.indexOf(roleName) > -1;
+}
+
+
+}

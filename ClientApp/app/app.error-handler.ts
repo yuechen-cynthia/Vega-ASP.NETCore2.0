@@ -4,7 +4,7 @@ import { ErrorHandler, Inject, NgZone, isDevMode } from '@angular/core';
 
 export class AppErrorHandler implements ErrorHandler {
   constructor(
-    private ngZone: NgZone,
+    @Inject(NgZone) private ngZone: NgZone,
     @Inject(ToastyService) private toastyService: ToastyService) {
   }
 
