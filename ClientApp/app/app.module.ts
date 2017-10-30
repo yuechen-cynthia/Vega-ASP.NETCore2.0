@@ -1,12 +1,11 @@
-import { AuthService } from './services/auth.service';
-import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
 import { PhotoService } from './services/photo.service';
+import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle';
 import { AppErrorHandler } from './app.error-handler';
 import { VehicleService } from './services/vehicle.service';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule, BrowserXhr } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component';
@@ -20,10 +19,7 @@ import { ToastyModule } from 'ng2-toasty';
 import * as Raven from 'raven-js';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
-import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
-import { AUTH_PROVIDERS } from "angular2-jwt/angular2-jwt";
-import { AdminAuthGuard } from './services/admin-auth-guard.service';
-import { AuthGuard } from './services/auth-guard.service';
+
 
 //added
 Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
@@ -66,15 +62,8 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
     //added
     providers: [
         { provide: ErrorHandler, useClass: AppErrorHandler},
-        { provide: BrowserXhr, useClass: BrowserXhrWithProgress},
-        
         VehicleService,
-        PhotoService,
-        ProgressService,
-        AuthService,
-        AuthGuard,
-        AdminAuthGuard,
-        AUTH_PROVIDERS
+        PhotoService
     ]
 })
 

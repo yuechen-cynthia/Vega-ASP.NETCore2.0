@@ -12,7 +12,6 @@ using vega.Persistence;
 using AutoMapper;
 using vega.Core;
 using vega.Core.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace vega
 {
@@ -29,25 +28,13 @@ namespace vega
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
-            
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
+            services.AddTransient<IPhotoService, PhotoService>();
+            services.AddTransient<IPhotoStorage, FileSystemPhotoStorage>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.AddScoped<IVehicleRepository,VehicleRepository>();
             services.AddAutoMapper();
-            services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
-            
-            // 1. Add Authentication Services
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            }).AddJwtBearer(options =>
-                {
-                    options.Authority = "https://vega-project.au.auth0.com/";
-                    options.Audience = "https://api.vega.com";
-                });
-            
-            
             services.AddMvc();
             services.AddMvc().AddJsonOptions(o => {
                 o.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
@@ -82,16 +69,6 @@ namespace vega
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-
-            // 2. Enable authentication middleware
-            app.UseAuthentication();
-
-            // var options = new JwtBearerOptions
-            // {
-            //     Audience = "https://api.vega.com",
-            //     Authority = "https://vegaproject.auth0.com/"
-            // };
-            //     app.UseJwtBearerAuthentication(options);
         }
     }
 }

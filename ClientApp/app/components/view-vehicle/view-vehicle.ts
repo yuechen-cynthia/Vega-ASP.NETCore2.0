@@ -1,4 +1,4 @@
-import { AuthService } from './../../services/auth.service';
+
 import { BrowserXhr } from '@angular/http';
 import { ProgressService, BrowserXhrWithProgress } from './../../services/progress.service';
 import { PhotoService } from './../../services/photo.service';
@@ -8,7 +8,7 @@ import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  templateUrl: 'view-vehicle.component.html',
+  templateUrl: 'view-vehicle.html',
   providers: [
     { provide: BrowserXhr, useClass: BrowserXhrWithProgress },
     ProgressService
@@ -22,7 +22,7 @@ export class ViewVehicleComponent implements OnInit {
   progress: any;
 
   constructor(
-    private auth: AuthService,
+
     private zone: NgZone,
     private route: ActivatedRoute, 
     private router: Router,
@@ -71,26 +71,24 @@ export class ViewVehicleComponent implements OnInit {
           this.progress = progress;
         });
       },
+      
       () => { this.progress = null; });
 
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
-    if (nativeElement.files){
-      var file = nativeElement.files[0];
-      nativeElement.value = ''; 
-      this.photoService.upload(this.vehicleId, file)
-        .subscribe(photo => {
-          this.photos.push(photo);
-        },
-        err => {
-          this.toasty.error({
-            title: 'Error',
-            msg: err.text(),
-            theme: 'bootstrap',
-            showClose: true,
-            timeout: 5000
-          });
+    var file = nativeElement.files![0];
+    nativeElement.value = ''; 
+    this.photoService.upload(this.vehicleId, file)
+      .subscribe(photo => {
+        this.photos.push(photo);
+      },
+      err => {
+        this.toasty.error({
+          title: 'Error',
+          msg: err.text(),
+          theme: 'bootstrap',
+          showClose: true,
+          timeout: 5000
         });
-    }
-    
+      });
   }
 }

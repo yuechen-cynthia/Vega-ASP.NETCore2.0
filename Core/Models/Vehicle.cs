@@ -29,9 +29,10 @@ namespace vega.Models
 
         public ICollection<VehicleFeature> Features { get; set; }
         public ICollection<Photo> Photos { get; set; }
-        public Vehicle() {
-            this.Features = new Collection<VehicleFeature>();
-            this.Photos = new Collection<Photo>();
+        public Vehicle()
+        {
+            Features = new Collection<VehicleFeature>();
+            Photos = new Collection<Photo>();
         }
     }
 }
