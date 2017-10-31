@@ -1,4 +1,4 @@
-
+import { Subject } from 'rxjs/Subject';
 import { BrowserXhr } from '@angular/http';
 import { ProgressService, BrowserXhrWithProgress } from './../../services/progress.service';
 import { PhotoService } from './../../services/photo.service';
@@ -7,19 +7,20 @@ import { VehicleService } from './../../services/vehicle.service';
 import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+
 @Component({
   templateUrl: 'view-vehicle.html',
-  providers: [
-    { provide: BrowserXhr, useClass: BrowserXhrWithProgress },
-    ProgressService
-  ]
+  // providers: [
+  //   { provide: BrowserXhr, useClass: BrowserXhrWithProgress },
+  //   ProgressService
+  // ]
 })
 export class ViewVehicleComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   vehicle: any;
   vehicleId: number; 
   photos: any[];
-  progress: any;
+  progress : object;
 
   constructor(
 
@@ -29,7 +30,8 @@ export class ViewVehicleComponent implements OnInit {
     private toasty: ToastyService,
     private progressService: ProgressService,
     private photoService: PhotoService,
-    private vehicleService: VehicleService) { 
+    private vehicleService: VehicleService,
+    private xhr: BrowserXhrWithProgress) { 
 
     route.params.subscribe(p => {
       this.vehicleId = +p['id'];
@@ -65,14 +67,20 @@ export class ViewVehicleComponent implements OnInit {
   }
 
   uploadPhoto() {    
+    console.log("1");
+   
     this.progressService.startTracking()
       .subscribe(progress => {
+        console.log("2");
         this.zone.run(() => {
+          this.xhr.build();
           this.progress = progress;
+          console.log("3");
         });
-      },
-      
-      () => { this.progress = null; });
+      }
+      ,
+      () => { this.progress = {}; }
+    );
 
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
     var file = nativeElement.files![0];

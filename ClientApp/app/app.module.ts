@@ -5,7 +5,7 @@ import { VehicleService } from './services/vehicle.service';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, BrowserXhr } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component';
@@ -19,6 +19,7 @@ import { ToastyModule } from 'ng2-toasty';
 import * as Raven from 'raven-js';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
 
 
 //added
@@ -62,8 +63,12 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
     //added
     providers: [
         { provide: ErrorHandler, useClass: AppErrorHandler},
+        { provide: BrowserXhr, useClass: BrowserXhrWithProgress},
+        BrowserXhrWithProgress,
         VehicleService,
-        PhotoService
+        PhotoService,
+        ProgressService
+        
     ]
 })
 
