@@ -1,3 +1,8 @@
+//import { Chart } from 'chart.js';
+import { AdminAuthGuard } from './services/admin-auth-guard.service';
+import { AuthGuard } from './services/auth.guard.service';
+import { AdminComponent } from './components/admin/admin.component';
+import { Auth } from './services/auth.service';
 import { PhotoService } from './services/photo.service';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle';
 import { AppErrorHandler } from './app.error-handler';
@@ -20,6 +25,8 @@ import * as Raven from 'raven-js';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
+import { AUTH_PROVIDERS } from 'angular2-jwt';
+import {ChartModule} from 'angular2-chartjs'
 
 
 //added
@@ -36,21 +43,26 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
         VehicleFormComponent,
         VehicleListComponent,
         PaginationComponent,
-        ViewVehicleComponent
+        ViewVehicleComponent,
+        AdminComponent
     ],
     imports: [
         CommonModule,
         HttpModule,
         FormsModule,
         //added
+        
+        ChartModule,
         ToastyModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
             //added
-            { path: 'vehicles/new', component: VehicleFormComponent },
-            { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+            { path: 'vehicles/new', component: VehicleFormComponent, canActivate: [ AuthGuard ] },
+            { path: 'vehicles/edit/:id', component: VehicleFormComponent, canActivate: [ AuthGuard ] },
             { path: 'vehicles/:id', component: ViewVehicleComponent },
             { path: 'vehicles', component: VehicleListComponent },
+            { path: 'admin', component: AdminComponent, canActivate:[AdminAuthGuard] },
+
             //
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
@@ -65,9 +77,15 @@ Raven.config('https://119104ece598427b9a72a81cc8b2719d@sentry.io/235207')
         { provide: ErrorHandler, useClass: AppErrorHandler},
         { provide: BrowserXhr, useClass: BrowserXhrWithProgress},
         BrowserXhrWithProgress,
+        ProgressService,
+
         VehicleService,
         PhotoService,
-        ProgressService
+        Auth,
+        AuthGuard,
+        AdminAuthGuard,
+        AUTH_PROVIDERS,
+        
         
     ]
 })

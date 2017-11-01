@@ -27,7 +27,12 @@ const nonTreeShakableModules = [
             'zone.js',
             'raven-js',
             'underscore',
-            "font-awesome/css/font-awesome.css"
+            "font-awesome/css/font-awesome.css",
+            'angular2-jwt',
+            'auth0-lock',
+            'chart.js',
+            'angular2-chartjs'
+
 
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);

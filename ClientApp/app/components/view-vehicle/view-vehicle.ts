@@ -1,3 +1,4 @@
+import { Auth } from './../../services/auth.service';
 import { Subject } from 'rxjs/Subject';
 import { BrowserXhr } from '@angular/http';
 import { ProgressService, BrowserXhrWithProgress } from './../../services/progress.service';
@@ -12,7 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: 'view-vehicle.html',
   // providers: [
   //   { provide: BrowserXhr, useClass: BrowserXhrWithProgress },
-  //   ProgressService
+  //   ProgressService,
+  //   BrowserXhrWithProgress
   // ]
 })
 export class ViewVehicleComponent implements OnInit {
@@ -23,7 +25,7 @@ export class ViewVehicleComponent implements OnInit {
   progress : object;
 
   constructor(
-
+    private auth:Auth,
     private zone: NgZone,
     private route: ActivatedRoute, 
     private router: Router,
@@ -68,12 +70,11 @@ export class ViewVehicleComponent implements OnInit {
 
   uploadPhoto() {    
     console.log("1");
-   
     this.progressService.startTracking()
       .subscribe(progress => {
         console.log("2");
         this.zone.run(() => {
-          this.xhr.build();
+          //this.xhr.build();
           this.progress = progress;
           console.log("3");
         });

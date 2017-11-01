@@ -12,6 +12,14 @@
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse'>
             <ul class='nav navbar-nav'>
+                <li [routerLinkActive]="['link-active']">
+                    <a  href="https://vega-project.au.auth0.com/login?client=HsbQuJeWGFoNaE6EvRA4S65i6yuAE5Bl" *ngIf="!auth.authenticated()">
+                        <span class='glyphicon glyphicon-user'></span> Login
+                    </a>
+                    <a (click)="auth.logout()" *ngIf="auth.authenticated()">
+                        <span class='glyphicon glyphicon-user'></span> Logout
+                    </a>
+                </li>
                 <li [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{exact: true}">
                     <a [routerLink]="['/vehicles']">
                         <span class='glyphicon glyphicon-home'></span> Vehicles
@@ -22,16 +30,12 @@
                         <span class='glyphicon glyphicon-plus'></span> New Vehicle
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/counter']">
-                        <span class='glyphicon glyphicon-education'></span> Counter
+                <li [routerLinkActive]="['link-active']" *ngIf="auth.isInRole('Admin') ">
+                    <a [routerLink]="['/admin']">
+                        <span class='glyphicon glyphicon-education'></span> Admin
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-data']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
-                    </a>
-                </li>
+                
             </ul>
         </div>
     </div>
