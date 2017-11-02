@@ -9,7 +9,7 @@ $ npm install
 
 $ dotnet restore
 
-Set ConnectionStrings:Default "<YOUR CONNETION STRING>" in appsettings.json
+Set ConnectionStrings:Default "< YOUR CONNETION STRING >" in appsettings.json
 
 $ webpack --config webpack.config.vendor.js
 
